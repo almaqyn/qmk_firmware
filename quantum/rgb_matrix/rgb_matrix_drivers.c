@@ -24,7 +24,7 @@
  * be here if shared between boards.
  */
 
-#if defined(IS31FL3731) || defined(IS31FL3733) || defined(IS31FL3736) || defined(IS31FL3737) || defined(IS31FL3741) || defined(IS31FLCOMMON) || defined(CKLED2001)
+#if defined(IS31FL3731) || defined(IS31FL3733) || defined(IS31FL3736) || defined(IS31FL3737) || defined(IS31FL3741) || defined(IS31FLCOMMON) || defined(RGB_MATRIX_SNLED27351)
 #    include "i2c_master.h"
 
 // TODO: Remove this at some later date
@@ -121,18 +121,14 @@ static void init(void) {
 #            endif
 #        endif
 
-#    elif defined(CKLED2001)
-#        if defined(LED_DRIVER_SHUTDOWN_PIN)
-    setPinOutput(LED_DRIVER_SHUTDOWN_PIN);
-    writePinHigh(LED_DRIVER_SHUTDOWN_PIN);
-#        endif
-    ckled2001_init(DRIVER_ADDR_1);
+#    elif defined(RGB_MATRIX_SNLED27351)
+    snled27351_init(DRIVER_ADDR_1);
 #        if defined(DRIVER_ADDR_2)
-    ckled2001_init(DRIVER_ADDR_2);
+    snled27351_init(DRIVER_ADDR_2);
 #            if defined(DRIVER_ADDR_3)
-    ckled2001_init(DRIVER_ADDR_3);
+    snled27351_init(DRIVER_ADDR_3);
 #                if defined(DRIVER_ADDR_4)
-    ckled2001_init(DRIVER_ADDR_4);
+    snled27351_init(DRIVER_ADDR_4);
 #                endif
 #            endif
 #        endif
@@ -154,8 +150,8 @@ static void init(void) {
         is31fl3741_set_led_control_register(index, enabled, enabled, enabled);
 #    elif defined(IS31FLCOMMON)
         IS31FL_RGB_set_scaling_buffer(index, enabled, enabled, enabled);
-#    elif defined(CKLED2001)
-        ckled2001_set_led_control_register(index, enabled, enabled, enabled);
+#    elif defined(RGB_MATRIX_SNLED27351)
+        snled27351_set_led_control_register(index, enabled, enabled, enabled);
 #    endif
     }
 
@@ -235,14 +231,14 @@ static void init(void) {
 #            endif
 #        endif
 
-#    elif defined(CKLED2001)
-    ckled2001_update_led_control_registers(DRIVER_ADDR_1, 0);
+#    elif defined(RGB_MATRIX_SNLED27351)
+    snled27351_update_led_control_registers(DRIVER_ADDR_1, 0);
 #        if defined(DRIVER_ADDR_2)
-    ckled2001_update_led_control_registers(DRIVER_ADDR_2, 1);
+    snled27351_update_led_control_registers(DRIVER_ADDR_2, 1);
 #            if defined(DRIVER_ADDR_3)
-    ckled2001_update_led_control_registers(DRIVER_ADDR_3, 2);
+    snled27351_update_led_control_registers(DRIVER_ADDR_3, 2);
 #                if defined(DRIVER_ADDR_4)
-    ckled2001_update_led_control_registers(DRIVER_ADDR_4, 3);
+    snled27351_update_led_control_registers(DRIVER_ADDR_4, 3);
 #                endif
 #            endif
 #        endif
@@ -375,15 +371,15 @@ const rgb_matrix_driver_t rgb_matrix_driver = {
     .set_color_all = IS31FL_RGB_set_color_all,
 };
 
-#    elif defined(CKLED2001)
+#    elif defined(RGB_MATRIX_SNLED27351)
 static void flush(void) {
-    ckled2001_update_pwm_buffers(DRIVER_ADDR_1, 0);
+    snled27351_update_pwm_buffers(DRIVER_ADDR_1, 0);
 #        if defined(DRIVER_ADDR_2)
-    ckled2001_update_pwm_buffers(DRIVER_ADDR_2, 1);
+    snled27351_update_pwm_buffers(DRIVER_ADDR_2, 1);
 #            if defined(DRIVER_ADDR_3)
-    ckled2001_update_pwm_buffers(DRIVER_ADDR_3, 2);
+    snled27351_update_pwm_buffers(DRIVER_ADDR_3, 2);
 #                if defined(DRIVER_ADDR_4)
-    ckled2001_update_pwm_buffers(DRIVER_ADDR_4, 3);
+    snled27351_update_pwm_buffers(DRIVER_ADDR_4, 3);
 #                endif
 #            endif
 #        endif
@@ -428,8 +424,8 @@ static void exit_shutdown(void) {
 const rgb_matrix_driver_t rgb_matrix_driver = {
     .init = init,
     .flush = flush,
-    .set_color = ckled2001_set_color,
-    .set_color_all = ckled2001_set_color_all,
+    .set_color = snled27351_set_color,
+    .set_color_all = snled27351_set_color_all,
 #        if defined(RGB_MATRIX_DRIVER_SHUTDOWN_ENABLE)
     .shutdown = shutdown,
     .exit_shutdown = exit_shutdown
