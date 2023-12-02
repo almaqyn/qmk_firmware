@@ -3,6 +3,7 @@
   "vendorId": "0x3434",
   "productId": "0x0220",
   "keycodes": ["qmk_lighting"],
+  "lighting": "vialrgb",
   "menus": [
     {
       "label": "Lighting",
